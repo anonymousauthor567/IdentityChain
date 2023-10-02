@@ -1,5 +1,5 @@
 # set your GPU device id
-export CUDA_VISIBLE_DEVICES=
+export CUDA_VISIBLE_DEVICES=0
 
 # set your HuggingFace home path and your IdentityChain home path
 export HF_HOME=YOUR_OWN_PATH/huggingface

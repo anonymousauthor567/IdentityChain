@@ -593,9 +593,9 @@ def main():
         os.makedirs("../tmp", exist_ok=True)
     if not os.path.exists(args.output_dir):
         os.makedirs(args.output_dir, exist_ok=True)
-    
+
     # unzip input file
-    input_path  = args.input_path
+    input_path = args.input_path
     input_file = input_path.split("/")[-1]
     g_unzip(f"../data/{input_file}.gz", input_path)
 

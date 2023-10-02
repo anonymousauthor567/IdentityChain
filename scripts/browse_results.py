@@ -9,9 +9,8 @@ import json
 
 # EXAMPLE USAGE:
 # python browse_results.py --input_path
-# ../tmp/ID-Chain_gpt-3.5-turbo-0613_tmp0_len5_pb_all_m_v5_EvalPlus-Mini-v0.1.6_reformatted.jsonl --chain_length 5 --start 0
-# python browse_results.py --input_path
-# ../tmp/ID-Chain_gpt-3.5-turbo-0613_tmp0_len5_pb_all_m_v5_MBPP-S_test_reformatted.jsonl --chain_length 5 --start 0
+# ../tmp/starcoderbase-1b/IDChain_starcoderbase-1b_tmp0.0g_len5_pb_all_m_v1_EvalPlus-Mini-v0.1.6_reformatted.jsonl
+# --chain_length 5 --start 0
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--input_path", type=str, required=True)

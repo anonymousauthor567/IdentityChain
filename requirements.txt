@@ -13,4 +13,4 @@ datasets
 deepspeed
 bitsandbytes==0.38.1
 sentencepiece
-protobuf==3.20.0
+protobuf==3.20.2

@@ -130,9 +130,8 @@ def calculate_TOM(reference_test_outputs, candidate_test_outputs, ignore_Timeout
 # EXAMPLE USAGE:
 # if you want to calculate text-embedding-ada-002 score, set the --enable_ada flag (default is False)
 # python analyze_results.py --input_path
-# ../tmp/ID-Chain_gpt-3.5-turbo-0613_tmp0_len5_pb_all_m_v5_EvalPlus-Mini-v0.1.6_reformatted.jsonl --chain_length 5
-# python analyze_results.py --input_path
-# ../tmp/ID-Chain_gpt-3.5-turbo-0613_tmp0_len5_pb_all_m_v5_MBPP-S_test_reformatted.jsonl --chain_length 5
+# ../tmp/starcoderbase-1b/IDChain_starcoderbase-1b_tmp0.0g_len5_pb_all_m_v1_EvalPlus-Mini-v0.1.6_reformatted.jsonl
+# --chain_length 5
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--input_path", type=str, required=True)
@@ -301,9 +300,7 @@ def main():
         detail_avg = pd.concat([detail_avg, pd.DataFrame([row])], ignore_index=True)
 
     # calculate summarized statistics for each step in the Identity Chain
-    summary = pd.DataFrame(
-        columns=["Step", "Total Count", "FixedPass Count", "FixedPass@N", "FixedPoint Count", "FixedPoint@N"]
-    )
+    summary = pd.DataFrame(columns=["Step", "Total Count", "SSC Count", "SSC_N", "SC Count", "SC_N"])
     # iterate over each step
     for i in range(args.chain_length + 1):
         row = {"Step": str(i)}
@@ -313,10 +310,10 @@ def main():
         # count FixedPass and FixedPoint
         if i == 0:
             PL_0_fpass_count = len(raw[raw["PL_0 Results Summary"] == "Passed"])
-            row["FixedPass Count"] = str(PL_0_fpass_count)
-            row["FixedPass@N"] = str(PL_0_fpass_count / total_count)
-            row["FixedPoint Count"] = ""
-            row["FixedPoint@N"] = ""
+            row["SSC Count"] = str(PL_0_fpass_count)
+            row["SSC_N"] = str(PL_0_fpass_count / total_count)
+            row["SC Count"] = ""
+            row["SC_N"] = ""
         else:
             # create filter condition for FixedPass
             condition_fpass = detail_traj["Step 0-1 Summary"] == "Pass-Pass"
@@ -328,12 +325,12 @@ def main():
                 condition_fpoint = condition_fpoint & (detail_traj[f"Step {j-1}-{j} TOM"] == "1.0")
             # if Pass at all N steps, then it is a FixedPass@N
             PL_i_fpass_count = len(detail_traj[condition_fpass])
-            row["FixedPass Count"] = str(PL_i_fpass_count)
-            row["FixedPass@N"] = str(PL_i_fpass_count / total_count)
+            row["SSC Count"] = str(PL_i_fpass_count)
+            row["SSC_N"] = str(PL_i_fpass_count / total_count)
             # if TOM = 1.0 at all N steps, then it is a FixedPoint@N
             PL_i_fpoint_count = len(detail_traj[condition_fpoint])
-            row["FixedPoint Count"] = str(PL_i_fpoint_count)
-            row["FixedPoint@N"] = str(PL_i_fpoint_count / total_count)
+            row["SC Count"] = str(PL_i_fpoint_count)
+            row["SC_N"] = str(PL_i_fpoint_count / total_count)
 
         summary = pd.concat([summary, pd.DataFrame([row])], ignore_index=True)
 
